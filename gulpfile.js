@@ -74,7 +74,7 @@ function html() {
 /* ===================  styles  =================== */
 
 function styles() {
-  return src(`${path.src.blocks}*.sass`)
+  return src([`${path.src.blocks}*.sass`, `${path.src.blocks}*.scss`])
     .pipe(dev(plugin.sourcemaps.init()))
     .pipe(
       plugin.plumber({

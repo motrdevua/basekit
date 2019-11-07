@@ -275,7 +275,7 @@ function fontgen() {
 
 function fonts() {
   return src(`${path.src.fonts}**/*.{svg,eot,ttf,woff,woff2}`).pipe(
-    dest(`${path.assets}fonts`)
+    dest(`${path.dist.assets}fonts`)
   );
 }
 

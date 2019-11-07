@@ -1,7 +1,7 @@
 {
-  "name": "4start",
+  "name": "basekit",
   "version": "1.0.0",
-  "description": "gulp4",
+  "description": "gulp 4/ sass/ bem/ bootstrap grid/ eslint/ prettier/ svgsprites/ pngsprites/ fontgen/",
   "main": "gulpfile.js",
   "scripts": {
     "clean": "gulp clean",

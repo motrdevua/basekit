@@ -329,7 +329,7 @@ exports.watch = watchFiles;
 /* ====================  dev  ===================== */
 
 exports.default = series(
-  // clean,
+  clean,
   // spritePng,
   // spriteSvg,
   parallel(html, styles, js, img, fonts, data),
@@ -339,7 +339,7 @@ exports.default = series(
 /* ===================  build  ==================== */
 
 exports.build = series(
-  // clean,
+  clean,
   // spritePng,
   // spriteSvg,
   parallel(html, styles, js, img, fonts, data)

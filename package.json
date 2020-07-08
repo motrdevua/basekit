@@ -6,7 +6,11 @@
   "scripts": {
     "clean": "gulp clean",
     "dev": "gulp --env development",
-    "build": "gulp build --env production"
+    "prod": "gulp build --env production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/motrdevua/basekit.git"
   },
   "author": "motrdevua",
   "license": "ISC",

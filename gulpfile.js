@@ -1,18 +1,17 @@
-const { src, dest, watch, series, parallel } = require('gulp');
-const plugin = require('gulp-load-plugins')({
+const { src, dest, watch, series, parallel } = require("gulp");
+const plugin = require("gulp-load-plugins")({
   rename: {
-    'gulp-clean-css': 'cleanCSS',
-    'gulp-svg-sprite': 'spriteSVG',
-    'gulp-group-css-media-queries': 'gcmq',
-    'gulp-html-prettify': 'prettify',
+    "gulp-clean-css": "cleanCSS",
+    "gulp-svg-sprite": "spriteSVG",
+    "gulp-group-css-media-queries": "gcmq",
   },
 });
 
-const imageminJR = require('imagemin-jpeg-recompress');
-const pngquant = require('imagemin-pngquant');
-const merge2 = require('merge2');
-const del = require('del');
-const browserSync = require('browser-sync').create();
+const imageminJR = require("imagemin-jpeg-recompress");
+const pngquant = require("imagemin-pngquant");
+const merge2 = require("merge2");
+const del = require("del");
+const browserSync = require("browser-sync").create();
 
 const dev = plugin.environments.development;
 const prod = plugin.environments.production;
@@ -20,25 +19,25 @@ const prod = plugin.environments.production;
 const onError = (err) => {
   plugin.notify.onError({
     title: `Error in ${err.plugin}`,
-    message: '<%= error.message %>',
-    sound: 'Pop',
+    message: "<%= error.message %>",
+    sound: "Pop",
     onLast: true,
   })(err);
-  this.emit('end');
+  this.emit("end");
 };
 
 const path = {
   src: {
-    root: 'src/',
-    js: 'src/js/',
-    img: 'src/img/',
-    fonts: 'src/fonts/',
-    blocks: 'src/blocks/',
-    data: 'src/data/',
+    root: "src/",
+    js: "src/js/",
+    img: "src/images/",
+    fonts: "src/fonts/",
+    blocks: "src/blocks/",
+    data: "src/data/",
   },
   dist: {
-    root: 'dist/',
-    assets: 'dist/assets/',
+    root: "dist/",
+    assets: "dist/assets/",
   },
 };
 
@@ -73,7 +72,7 @@ function styles() {
   return src(`${path.src.blocks}*.+(scss|sass)`)
     .pipe(dev(plugin.sourcemaps.init()))
     .pipe(plugin.plumber({ errorHandler: onError }))
-    .pipe(plugin.sass({ outputStyle: 'expanded' }))
+    .pipe(plugin.sass({ outputStyle: "expanded" }))
     .pipe(plugin.autoprefixer())
     .pipe(plugin.gcmq())
     .pipe(
@@ -84,8 +83,8 @@ function styles() {
         })
       )
     )
-    .pipe(dev(plugin.sourcemaps.write('.')))
-    .pipe(plugin.rename({ suffix: '.min' }))
+    .pipe(dev(plugin.sourcemaps.write(".")))
+    .pipe(plugin.rename({ suffix: ".min" }))
     .pipe(dest(`${path.dist.assets}css`))
     .pipe(browserSync.stream());
 }
@@ -93,7 +92,7 @@ function styles() {
 /* =====================  js  ===================== */
 
 function js() {
-  return src(`${path.src.js}*.js`)
+  return src(`${path.src.js}main.js`)
     .pipe(dev(plugin.sourcemaps.init()))
     .pipe(plugin.plumber({ errorHandler: onError }))
     .pipe(
@@ -105,9 +104,9 @@ function js() {
         ],
       })
     )
-    .pipe(plugin.babel({ presets: ['@babel/env'] }))
+    .pipe(plugin.babel({ presets: ["@babel/env"] }))
     .pipe(prod(plugin.uglify()))
-    .pipe(dev(plugin.sourcemaps.write('.')))
+    .pipe(dev(plugin.sourcemaps.write(".")))
     .pipe(dest(`${path.dist.assets}js`))
     .pipe(browserSync.reload({ stream: true }));
 }
@@ -117,10 +116,10 @@ function js() {
 function spritePng() {
   const spriteData = src(`${path.src.img}png/*.png`).pipe(
     plugin.spritesmith({
-      imgName: 'sprite.png',
-      cssName: '_spritePng.sass',
-      cssFormat: 'sass',
-      algorithm: 'binary-tree',
+      imgName: "sprite.png",
+      cssName: "_spritePng.sass",
+      cssFormat: "sass",
+      algorithm: "binary-tree",
       padding: 4,
       cssTemplate: `${path.src.styles}utils/spritePng.template.sass`,
     })
@@ -149,16 +148,16 @@ function spriteSvg() {
       //     },
       //   })
       // )
-      .pipe(plugin.replace('&gt;', '>'))
+      .pipe(plugin.replace("&gt;", ">"))
       .pipe(
         plugin.spriteSVG({
           mode: {
             symbol: {
-              dest: './',
-              sprite: 'spriteSvg.svg',
+              dest: "./",
+              sprite: "spriteSvg.svg",
               render: {
                 sass: {
-                  dest: '../styles/tmp/_spriteSvg.sass',
+                  dest: "../styles/tmp/_spriteSvg.sass",
                   template: `${path.src.styles}utils/spriteSvg.template.sass`,
                 },
               },
@@ -166,8 +165,8 @@ function spriteSvg() {
                 xmlDeclaration: false,
                 doctypeDeclaration: false,
                 rootAttributes: {
-                  style: 'display:none;',
-                  'aria-hidden': 'true',
+                  style: "display:none;",
+                  "aria-hidden": "true",
                 },
               },
             },
@@ -194,14 +193,14 @@ function img() {
               plugin.imagemin.svgo({
                 plugins: [{ removeViewBox: false }, { cleanupIDs: false }],
               }),
-              imageminJR({ method: 'ms-ssim' }),
+              imageminJR({ method: "ms-ssim" }),
             ],
             { verbose: true }
           )
         )
       )
     )
-    .pipe(dest(`${path.dist.assets}img`));
+    .pipe(dest(`${path.dist.assets}images`));
 }
 
 /* ===================  fontgen  ================== */
@@ -250,7 +249,7 @@ function clean() {
     `${path.src.img}spriteSvg.svg`,
     `${path.src.img}sprite.png`,
   ]).then((dir) => {
-    console.log('Deleted files and folders:\n', dir.join('\n'));
+    console.log("Deleted files and folders:\n", dir.join("\n"));
   });
 }
 

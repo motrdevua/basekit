@@ -17,7 +17,7 @@ const browserSync = require('browser-sync').create();
 const dev = plugin.environments.development;
 const prod = plugin.environments.production;
 
-const onError = err => {
+const onError = (err) => {
   plugin.notify.onError({
     title: `Error in ${err.plugin}`,
     message: '<%= error.message %>',
@@ -64,11 +64,7 @@ function html() {
       })
     )
     .pipe(dest(path.dist.root))
-    .pipe(
-      browserSync.reload({
-        stream: true,
-      })
-    );
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 /* ===================  styles  =================== */
@@ -76,38 +72,20 @@ function html() {
 function styles() {
   return src(`${path.src.blocks}*.+(scss|sass)`)
     .pipe(dev(plugin.sourcemaps.init()))
-    .pipe(
-      plugin.plumber({
-        errorHandler: onError,
-      })
-    )
-    .pipe(
-      plugin.sass({
-        outputStyle: 'expanded',
-      })
-    )
+    .pipe(plugin.plumber({ errorHandler: onError }))
+    .pipe(plugin.sass({ outputStyle: 'expanded' }))
     .pipe(plugin.autoprefixer())
     .pipe(plugin.gcmq())
     .pipe(
       prod(
-        plugin.cleanCSS(
-          {
-            level: 2,
-            debug: true,
-          },
-          details => {
-            console.log(`${details.name}: ${details.stats.originalSize}`);
-            console.log(`${details.name}: ${details.stats.minifiedSize}`);
-          }
-        )
+        plugin.cleanCSS({ level: 2, debug: true }, (details) => {
+          console.log(`${details.name}: ${details.stats.originalSize}`);
+          console.log(`${details.name}: ${details.stats.minifiedSize}`);
+        })
       )
     )
     .pipe(dev(plugin.sourcemaps.write('.')))
-    .pipe(
-      plugin.rename({
-        suffix: '.min',
-      })
-    )
+    .pipe(plugin.rename({ suffix: '.min' }))
     .pipe(dest(`${path.dist.assets}css`))
     .pipe(browserSync.stream());
 }
@@ -117,11 +95,7 @@ function styles() {
 function js() {
   return src(`${path.src.js}*.js`)
     .pipe(dev(plugin.sourcemaps.init()))
-    .pipe(
-      plugin.plumber({
-        errorHandler: onError,
-      })
-    )
+    .pipe(plugin.plumber({ errorHandler: onError }))
     .pipe(
       plugin.include({
         includePaths: [
@@ -131,19 +105,11 @@ function js() {
         ],
       })
     )
-    .pipe(
-      plugin.babel({
-        presets: ['@babel/env'],
-      })
-    )
+    .pipe(plugin.babel({ presets: ['@babel/env'] }))
     .pipe(prod(plugin.uglify()))
     .pipe(dev(plugin.sourcemaps.write('.')))
     .pipe(dest(`${path.dist.assets}js`))
-    .pipe(
-      browserSync.reload({
-        stream: true,
-      })
-    );
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 /* =====================  png  ==================== */
@@ -169,18 +135,8 @@ function spritePng() {
 function spriteSvg() {
   return (
     src(`${path.src.img}svg/*.svg`)
-      .pipe(
-        plugin.plumber({
-          errorHandler: onError,
-        })
-      )
-      .pipe(
-        plugin.svgmin({
-          js2svg: {
-            pretty: true,
-          },
-        })
-      )
+      .pipe(plugin.plumber({ errorHandler: onError }))
+      .pipe(plugin.svgmin({ js2svg: { pretty: true } }))
       // .pipe(
       //   plugin.cheerio({
       //     run: $ => {
@@ -231,30 +187,16 @@ function img() {
         plugin.cache(
           plugin.imagemin(
             [
-              plugin.imagemin.gifsicle({
-                interlaced: true,
+              plugin.imagemin.gifsicle({ interlaced: true }),
+              plugin.imagemin.mozjpeg({ quality: 75, progressive: true }),
+              plugin.imagemin.optipng({ optimizationLevel: 5 }),
+              pngquant({ quality: [0.75, 0.9], speed: 5 }),
+              plugin.imagemin.svgo({
+                plugins: [{ removeViewBox: false }, { cleanupIDs: false }],
               }),
-              plugin.imagemin.jpegtran({
-                progressive: true,
-              }),
-              imageminJR({
-                loops: 5,
-                min: 65,
-                max: 70,
-                quality: 'medium',
-              }),
-              plugin.imagemin.svgo(),
-              plugin.imagemin.optipng({
-                optimizationLevel: 3,
-              }),
-              pngquant({
-                quality: [0.65, 0.7],
-                speed: 5,
-              }),
+              imageminJR({ method: 'ms-ssim' }),
             ],
-            {
-              verbose: true,
-            }
+            { verbose: true }
           )
         )
       )
@@ -307,7 +249,7 @@ function clean() {
     `${path.src.scss}tmp`,
     `${path.src.img}spriteSvg.svg`,
     `${path.src.img}sprite.png`,
-  ]).then(dir => {
+  ]).then((dir) => {
     console.log('Deleted files and folders:\n', dir.join('\n'));
   });
 }

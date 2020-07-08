@@ -9,15 +9,13 @@
 @import utils/variables
 
 /*! Bootstrap Grid */
-@import ../../node_modules/bootstrap/scss/bootstrap-grid
+// @import ../../node_modules/bootstrap/scss/bootstrap-grid
 /*! Bootstrap Grid End*/
 
-/*! Smart-grid */
-// @import ../../smart-grid
+// p {
+//   @include rfs(48, 16);
+// }
 
-/*! RFS */
-@import ../../node_modules/rfs/sass
-/*! RFS End*/
 
 // ========================================================
 //      Uncomment if png or svg folder not empty
@@ -29,12 +27,11 @@
 
 // ====================  Default  =========================
 
-
 /*! Defaults */
 body
   color: $main-color
+  font-size: 16px
   font-family: $default-font
-  +font-size(16px)
 
 // sticky footer (always at the bottom of page)
 
@@ -50,14 +47,14 @@ body
 .footer
   flex: 0 0 auto
 
-// .container
-//   display: flex
-//   flex-direction: column
-//   justify-content: center
-//   width: 100%
-//   max-width: 1200px
-//   margin: 0 auto
-//   padding: 0 15px
+.container
+  display: flex
+  flex-direction: column
+  justify-content: center
+  margin: 0 auto
+  padding: 0 15px
+  max-width: 1200px
+  width: 100%
 
 /*! Defaults End */
 
@@ -70,22 +67,18 @@ body
 // =====================  Media  ==========================
 
 @media screen and (max-width: 1200px)
-  .header,
-  .footer
+  .header, .footer
     background: #ff0022
 @media screen and (max-width: 992px)
-  .header,
-  .footer
+  .header, .footer
     background: #fbff00
 @media screen and (max-width: 768px)
-  .header,
-  .footer
+  .header, .footer
     background: #2bff00
 @media screen and (max-width: 576px)
-  .header,
-  .footer
+  .header, .footer
     background: #00ccff
 @media screen and (max-width: 320px)
-  .header,
-  .footer
+  .header, .footer
     background: #ff0080
+

@@ -158,7 +158,7 @@ function spriteSvg() {
               render: {
                 sass: {
                   dest: "../styles/tmp/_spriteSvg.sass",
-                  template: `${path.src.styles}utils/spriteSvg.template.sass`,
+                  template: `${path.src.blocks}utils/spriteSvg.template.sass`,
                 },
               },
               svg: {
@@ -272,7 +272,7 @@ exports.watch = watchFiles;
 exports.default = series(
   clean,
   // spritePng,
-  // spriteSvg,
+  spriteSvg,
   parallel(html, styles, js, img, fonts, data),
   parallel(watchFiles, serve)
 );
@@ -282,6 +282,6 @@ exports.default = series(
 exports.build = series(
   clean,
   // spritePng,
-  // spriteSvg,
+  spriteSvg,
   parallel(html, styles, js, img, fonts, data)
 );

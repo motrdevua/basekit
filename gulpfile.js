@@ -117,11 +117,11 @@ function spritePng() {
   const spriteData = src(`${path.src.img}png/*.png`).pipe(
     plugin.spritesmith({
       imgName: "sprite.png",
-      cssName: "_spritePng.sass",
-      cssFormat: "sass",
+      cssName: "_spritePng.scss",
+      cssFormat: "scss",
       algorithm: "binary-tree",
       padding: 4,
-      cssTemplate: `${path.src.styles}utils/spritePng.template.sass`,
+      cssTemplate: `${path.src.styles}utils/spritePng.template.scss`,
     })
   );
   const imgStream = spriteData.img.pipe(dest(path.src.img));
@@ -153,20 +153,20 @@ function spriteSvg() {
         plugin.spriteSVG({
           mode: {
             symbol: {
-              dest: "./",
-              sprite: "spriteSvg.svg",
+              dest: './',
+              sprite: 'spriteSvg.svg',
               render: {
-                sass: {
-                  dest: "../styles/tmp/_spriteSvg.sass",
-                  template: `${path.src.blocks}utils/spriteSvg.template.sass`,
+                scss: {
+                  dest: '../styles/tmp/_spriteSvg.scss',
+                  template: `${path.src.blocks}utils/spriteSvg.template.scss`,
                 },
               },
               svg: {
                 xmlDeclaration: false,
                 doctypeDeclaration: false,
                 rootAttributes: {
-                  style: "display:none;",
-                  "aria-hidden": "true",
+                  style: 'display:none;',
+                  'aria-hidden': 'true',
                 },
               },
             },

@@ -1,0 +1,12 @@
+@mixin rfs($pc, $mob) {
+  $addSize: $pc - $mob;
+  $addMobSize: $addSize + $addSize * 0.7;
+
+  @media (max-width: 767px) {
+    font-size: calc(#{$mob + px} + #{$addMobSize} * ((100vw - 375px) / #{$maxWidth}));
+  }
+
+  @media (min-width: 767px) {
+    font-size: calc(#{$mob + px} + #{$addSize} * (100vw / #{$maxWidth}));
+  }
+}

@@ -9,19 +9,6 @@
 @import "utils/variables";
 @import "utils/mixin_rfs";
 
-/*! Bootstrap Grid */
-@import "../../node_modules/bootstrap/scss/bootstrap-grid";
-/*! Bootstrap Grid End*/
-
-// ========================================================
-//      Uncomment if png or svg folder not empty
-// ========================================================
-
-// @import "utils/mixin-spritePng";
-
-// @import "tmp/spritePng";
-// @import "tmp/spriteSvg";
-
 // ====================  Default  =========================
 
 /*! Defaults */
@@ -39,7 +26,10 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-
+  // overflow: hidden;
+}
+.header {
+  flex: 0 0 auto;
 }
 
 .content {
@@ -52,7 +42,7 @@ body {
 
 .container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   margin: 0 auto;
   padding: 0 15px;
@@ -68,18 +58,29 @@ body {
   align-items: center;
 }
 
+.img-wrap {
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+
+  & img {
+    max-width: 100%;
+    object-fit: cover;
+  }
+}
+
 /*! Defaults End */
 
 // =====================  modules  ========================
 
 @import "header/header";
-@import "content/content";
 @import "footer/footer";
 
 // =====================  Media  ==========================
 
 @media screen and (max-width: 1199px) {
-
   .header,
   .footer {
     background: #ff0022;
@@ -87,7 +88,6 @@ body {
 }
 
 @media screen and (max-width: 991px) {
-
   .header,
   .footer {
     background: #fbff00;
@@ -95,7 +95,6 @@ body {
 }
 
 @media screen and (max-width: 767px) {
-
   .header,
   .footer {
     background: #2bff00;
@@ -103,7 +102,6 @@ body {
 }
 
 @media screen and (max-width: 575px) {
-
   .header,
   .footer {
     background: #00ccff;
@@ -111,7 +109,6 @@ body {
 }
 
 @media screen and (max-width: 319px) {
-
   .header,
   .footer {
     background: #ff0080;

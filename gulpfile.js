@@ -30,7 +30,7 @@ const path = {
     js: "src/assets/js/",
     img: "src/assets/images/",
     fonts: "src/assets/fonts/",
-    blocks: "src/assets/blocks/",
+    styles: "src/assets/styles/",
     data: "src/assets/data/",
   },
   dist: {
@@ -51,10 +51,14 @@ function serve() {
 /* =====================  html  ==================== */
 
 function html() {
-  return src(`${path.src.root}*.html`)
+  return src([`${path.src.root}*.html`, `!${path.src.root}_*.html`])
     .pipe(
       plugin.include({
-        includePaths: [`${__dirname}/${path.src.blocks}*`],
+        includePaths: [
+          `${__dirname}/${path.src.root}`,
+          `${__dirname}/${path.src.img}`,
+          `${__dirname}/${path.src.img}*`,
+        ],
       })
     )
     .pipe(plugin.webpHTML())
@@ -69,7 +73,7 @@ function html() {
 /* ===================  styles  =================== */
 
 function styles() {
-  return src(`${path.src.blocks}*.+(scss|sass)`)
+  return src(`${path.src.styles}*.+(scss|sass)`)
     .pipe(dev(plugin.sourcemaps.init()))
     .pipe(
       plugin.plumber({
@@ -122,7 +126,6 @@ function js() {
       plugin.include({
         includePaths: [
           `${__dirname}/node_modules/`,
-          `${__dirname}/${path.src.blocks}*`,
           `${__dirname}/${path.src.js}`,
         ],
       })
@@ -202,7 +205,7 @@ function data() {
 
 function watchFiles() {
   watch(`${path.src.root}**/*.html`, html);
-  watch(path.src.blocks, styles);
+  watch(path.src.styles, styles);
   watch(path.src.js, js);
   watch(path.src.img, img);
   watch(path.src.data, data);

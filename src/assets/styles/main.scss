@@ -1,33 +1,43 @@
 // =====================  Utils  ==========================
 
-@import "utils/mixin_font-face";
-@import "utils/fontstylesheet";
+@import 'utils/mixin_font-face';
+@import 'utils/fontstylesheet';
 
-@import "utils/reset";
-@import "utils/nulling";
+@import 'utils/reset';
+@import 'utils/nulling';
 
-@import "utils/variables";
-@import "utils/mixin_rfs";
+@import 'utils/variables';
+@import 'utils/mixin_rfs';
 
 // ====================  Default  =========================
 
 /*! Defaults */
-body {
-  color: $main-color;
-  font-family: $default-font;
 
-  @include rfs(24, 16);
+html, body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  min-width: $minWidth + px;
+  width: 100%;
+  height: 100%;
+  color: $main;
+  font-family: $default;
+
+  @include rfs(16, 12);
 }
 
 // sticky footer (always at the bottom of page)
 
 .wrapper {
-  position: relative;
   display: flex;
+  overflow: hidden;
+  flex: 1 1 auto;
   flex-direction: column;
+  min-height: 100%;
+  width: 100%;
   height: 100%;
-  // overflow: hidden;
 }
+
 .header {
   flex: 0 0 auto;
 }
@@ -38,24 +48,26 @@ body {
 
 .footer {
   flex: 0 0 auto;
+  height: 10vh;
 }
 
 .container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   margin: 0 auto;
   padding: 0 15px;
   max-width: 1170px;
   width: 100%;
-}
-
-.col {
-  width: 50%;
-  padding: 0 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @media screen and (max-width: $lg + px) {
+    max-width: calc($lg + px - 30px);
+  }
+  @media screen and (max-width: $md + px) {
+    max-width: calc($md + px - 30px);
+  }
+  @media screen and (max-width: $sm + px) {
+    max-width: calc($sm + px - 30px);
+  }
 }
 
 .img-wrap {
@@ -67,6 +79,7 @@ body {
 
   & img {
     max-width: 100%;
+
     object-fit: cover;
   }
 }
@@ -75,42 +88,39 @@ body {
 
 // =====================  modules  ========================
 
-@import "header/header";
-@import "footer/footer";
+@import 'header';
+@import 'footer';
+
+// =====================  Styles  =========================
 
 // =====================  Media  ==========================
 
 @media screen and (max-width: 1199px) {
-  .header,
-  .footer {
+  .header, .footer {
     background: #ff0022;
   }
 }
 
 @media screen and (max-width: 991px) {
-  .header,
-  .footer {
+  .header, .footer {
     background: #fbff00;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .header,
-  .footer {
+  .header, .footer {
     background: #2bff00;
   }
 }
 
 @media screen and (max-width: 575px) {
-  .header,
-  .footer {
+  .header, .footer {
     background: #00ccff;
   }
 }
 
 @media screen and (max-width: 319px) {
-  .header,
-  .footer {
+  .header, .footer {
     background: #ff0080;
   }
 }

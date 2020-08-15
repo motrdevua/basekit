@@ -1,4 +1,8 @@
 window.addEventListener("load", function () {
-  //= include log.js
-  console.log("All resources finished loading!");
+  const burger = document.querySelector(".menu__burger");
+
+  burger.addEventListener("click", function (e) {
+    e.preventDefault();
+    this.classList.toggle("active");
+  });
 });

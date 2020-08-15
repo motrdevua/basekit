@@ -1,12 +1,13 @@
+$screen: 1920;
 @mixin rfs($pc, $mob) {
   $addSize: $pc - $mob;
   $addSizeMob: $addSize + $addSize * .7;
 
   @media (max-width: 767px) {
-    font-size: calc(#{$mob + px} + #{$addSizeMob} * ((100vw - 375px) / #{$maxWidth}));
+    font-size: calc(#{$mob + px} + #{$addSizeMob} * ((100vw - 375px) / #{$screen}));
   }
 
   @media (min-width: 767px) {
-    font-size: calc(#{$mob + px} + #{$addSize} * (100vw / #{$maxWidth}));
+    font-size: calc(#{$mob + px} + #{$addSize} * (100vw / #{$screen}));
   }
 }

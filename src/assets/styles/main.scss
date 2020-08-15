@@ -21,6 +21,7 @@ html, body {
   width: 100%;
   height: 100%;
   color: $main;
+  font-size: 16px;
   font-family: $default;
 
   @include rfs(16, 12);
@@ -35,7 +36,6 @@ html, body {
   flex-direction: column;
   min-height: 100%;
   width: 100%;
-  height: 100%;
 }
 
 .header {
@@ -57,7 +57,7 @@ html, body {
   justify-content: center;
   margin: 0 auto;
   padding: 0 15px;
-  max-width: 1170px;
+  max-width: $maxWidth + px;
   width: 100%;
   @media screen and (max-width: $lg + px) {
     max-width: calc($lg + px - 30px);

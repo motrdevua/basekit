@@ -10,6 +10,7 @@ const plugin = require("gulp-load-plugins")({
 
 const del = require("del");
 const browserSync = require("browser-sync").create();
+const imagemin = require("gulp-imagemin");
 
 const dev = plugin.environments.development;
 const prod = plugin.environments.production;
@@ -156,23 +157,25 @@ function img() {
   return src(`${path.src.img}**/*.*`)
     .pipe(
       plugin.webp({
-        quality: 70,
+        quality: 75,
       })
     )
     .pipe(dest(`${path.dist.assets}images`))
     .pipe(src(`${path.src.img}**/*.*`))
     .pipe(
       plugin.cache(
-        plugin.imagemin({
-          interlaced: true,
-          progressive: true,
-          optimizationLevel: 3,
-          svgoPlugins: [
-            {
-              removeViewBox: false,
-            },
-          ],
-        })
+        imagemin([
+          imagemin.gifsicle({ interlaced: true }),
+          imagemin.mozjpeg({ quality: 75, progressive: true }),
+          imagemin.optipng({ optimizationLevel: 5 }),
+          imagemin.svgo({
+            plugins: [
+              { removeViewBox: true },
+              { cleanupIDs: false },
+              { removeUnknownsAndDefaults: false },
+            ],
+          }),
+        ])
       )
     )
     .pipe(dest(`${path.dist.assets}images`));

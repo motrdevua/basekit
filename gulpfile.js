@@ -63,6 +63,7 @@ function html() {
       })
     )
     .pipe(plugin.webpHTML())
+    .pipe(plugin.beautify.html({ indent_size: 2 }))
     .pipe(dest(path.dist.root))
     .pipe(
       browserSync.reload({

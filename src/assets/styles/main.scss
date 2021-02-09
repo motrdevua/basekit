@@ -20,11 +20,18 @@ html, body {
   min-width: $minWidth + px;
   width: 100%;
   height: 100%;
-  color: $main;
-  font-size: 16px;
-  font-family: $default;
+}
 
-  @include rfs(16, 12);
+body {
+  background-color: $white;
+  color: $main;
+  letter-spacing: -.022em;
+  font-weight: 400;
+  font-style: normal;
+  font-family: $default;
+  line-height: 1.47059;
+
+  @include rfs(17, 12);
 }
 
 // sticky footer (always at the bottom of page)
@@ -48,7 +55,6 @@ html, body {
 
 .footer {
   flex: 0 0 auto;
-  height: 10vh;
 }
 
 .container {
@@ -60,13 +66,16 @@ html, body {
   max-width: $maxWidth + px;
   width: 100%;
   @media screen and (max-width: $lg + px) {
-    max-width: calc($lg + px - 30px);
+    max-width: calc(1199.98px - 30px);
   }
   @media screen and (max-width: $md + px) {
-    max-width: calc($md + px - 30px);
+    max-width: calc(991.98 px - 30px);
   }
   @media screen and (max-width: $sm + px) {
-    max-width: calc($sm + px - 30px);
+    max-width: calc(767.98px - 30px);
+  }
+  @media screen and (max-width: $s + px) {
+    max-width: calc(575.98px - 30px);
   }
 }
 
@@ -79,6 +88,16 @@ html, body {
 
   & img {
     max-width: 100%;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+  & picture {
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
 
     object-fit: cover;
   }

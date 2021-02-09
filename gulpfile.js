@@ -4,13 +4,17 @@ const plugin = require("gulp-load-plugins")({
     "gulp-clean-css": "cleanCSS",
     "gulp-group-css-media-queries": "gcmq",
     "gulp-webp-html": "webpHTML",
-    "gulp-webp-css": "webpCSS",
   },
 });
 
 const del = require("del");
-const browserSync = require("browser-sync").create();
 const imagemin = require("gulp-imagemin");
+
+const browserSync = require("browser-sync").create();
+
+const webpack = require("webpack");
+const stream = require("webpack-stream");
+const TerserJSPlugin = require("terser-webpack-plugin");
 
 const dev = plugin.environments.development;
 const prod = plugin.environments.production;
@@ -40,12 +44,50 @@ const path = {
   },
 };
 
+/* ===============   webpackConfig  =============== */
+
+const webpackConfig = {
+  mode: dev() ? "development" : "production",
+  output: {
+    filename: `[name].js`,
+  },
+  devtool: dev() ? "eval-source-map" : "none",
+  optimization: {
+    minimizer: [new TerserJSPlugin({})],
+    splitChunks: {
+      chunks: "all",
+    },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+    ],
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery",
+    }),
+  ],
+  resolve: {
+    modules: ["node_modules"],
+  },
+};
+
 /* ===================   serve  =================== */
 
 function serve() {
   browserSync.init({
     server: path.dist.root,
-    // tunnel: "project",
+    // tunnel: 'project', // Demonstration page: http://project.localtunnel.me
+    // online: false, // Work Offline Without Internet Connection
   });
 }
 
@@ -87,7 +129,6 @@ function styles() {
         outputStyle: "expanded",
       })
     )
-    .pipe(plugin.webpCSS())
     .pipe(plugin.autoprefixer())
     .pipe(plugin.gcmq())
     .pipe(
@@ -115,30 +156,14 @@ function styles() {
 }
 
 /* =====================  js  ===================== */
-
 function js() {
   return src(`${path.src.js}main.js`)
-    .pipe(dev(plugin.sourcemaps.init()))
     .pipe(
       plugin.plumber({
         errorHandler: onError,
       })
     )
-    .pipe(
-      plugin.include({
-        includePaths: [
-          `${__dirname}/node_modules/`,
-          `${__dirname}/${path.src.js}`,
-        ],
-      })
-    )
-    .pipe(
-      plugin.babel({
-        presets: ["@babel/env"],
-      })
-    )
-    .pipe(prod(plugin.uglify()))
-    .pipe(dev(plugin.sourcemaps.write(".")))
+    .pipe(stream(webpackConfig))
     .pipe(
       plugin.rename({
         suffix: ".min",
@@ -158,7 +183,7 @@ function img() {
   return src(`${path.src.img}**/*.*`)
     .pipe(
       plugin.webp({
-        quality: 75,
+        quality: 90,
       })
     )
     .pipe(dest(`${path.dist.assets}images`))
@@ -167,11 +192,11 @@ function img() {
       plugin.cache(
         imagemin([
           imagemin.gifsicle({ interlaced: true }),
-          imagemin.mozjpeg({ quality: 75, progressive: true }),
+          imagemin.mozjpeg({ quality: 90, progressive: true }),
           imagemin.optipng({ optimizationLevel: 5 }),
           imagemin.svgo({
             plugins: [
-              { removeViewBox: true },
+              { removeViewBox: false },
               { cleanupIDs: false },
               { removeUnknownsAndDefaults: false },
             ],

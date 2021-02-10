@@ -1,0 +1,28 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jquery": true,
+    "commonjs": true
+  },
+  "extends": [
+    "airbnb-base",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": 0,
+    "func-names": [
+      "error",
+      "never"
+    ]
+  },
+  "plugins": [
+    "dollar-sign",
+    "jquery"
+  ]
+}

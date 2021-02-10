@@ -53,7 +53,12 @@ const webpackConfig = {
   },
   devtool: dev() ? "eval-source-map" : "none",
   optimization: {
-    minimizer: [new TerserJSPlugin({})],
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        test: /\.js(\?.*)?$/i,
+      }),
+    ],
     splitChunks: {
       chunks: "all",
     },

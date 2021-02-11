@@ -9,6 +9,9 @@
 @import 'utils/variables';
 @import 'utils/mixin_rfs';
 
+@import '../../../node_modules/bootstrap/scss/mixins/_breakpoints.scss';
+@import '../../../node_modules/bootstrap/scss/bootstrap-grid.scss';
+
 // ====================  Default  =========================
 
 /*! Defaults */
@@ -65,16 +68,20 @@ body {
   padding: 0 15px;
   max-width: $maxWidth + px;
   width: 100%;
-  @media screen and (max-width: $lg + px) {
+
+  @media screen and (max-width: 1199.98px) {
     max-width: calc(1199.98px - 30px);
   }
-  @media screen and (max-width: $md + px) {
-    max-width: calc(991.98 px - 30px);
+
+  @media screen and (max-width: 991.98px) {
+    max-width: calc(991.98px - 30px);
   }
-  @media screen and (max-width: $sm + px) {
+
+  @media screen and (max-width: 767.98px) {
     max-width: calc(767.98px - 30px);
   }
-  @media screen and (max-width: $s + px) {
+
+  @media screen and (max-width: 575.98px) {
     max-width: calc(575.98px - 30px);
   }
 }
@@ -107,39 +114,11 @@ body {
 
 // =====================  modules  ========================
 
-@import 'header';
-@import 'footer';
+@import '../../blocks/ru/header/_header';
+@import '../../blocks/ru/footer/_footer';
 
 // =====================  Styles  =========================
 
 // =====================  Media  ==========================
 
-@media screen and (max-width: 1199px) {
-  .header, .footer {
-    background: #ff0022;
-  }
-}
-
-@media screen and (max-width: 991px) {
-  .header, .footer {
-    background: #fbff00;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .header, .footer {
-    background: #2bff00;
-  }
-}
-
-@media screen and (max-width: 575px) {
-  .header, .footer {
-    background: #00ccff;
-  }
-}
-
-@media screen and (max-width: 319px) {
-  .header, .footer {
-    background: #ff0080;
-  }
-}
+@import 'utils/media';

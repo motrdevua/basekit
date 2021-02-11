@@ -1,0 +1,55 @@
+/*==========  Desktop First  ==========*/
+
+//retina
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi),
+only screen and (min-resolution: 2dppx) {
+}
+
+// ≥1200px
+@include media-breakpoint-down(lg) {
+  .header, .footer {
+    background: #ff0022;
+  }
+}
+
+// ≥992px
+@include media-breakpoint-down(md) {
+  .header, .footer {
+    background: #fbff00;
+  }
+}
+
+// ≥768px
+@include media-breakpoint-down(sm) {
+  .header, .footer {
+    background: #2bff00;
+  }
+}
+
+// ≥576px
+@include media-breakpoint-down(xs) {
+  .header, .footer {
+    background: #00ccff;
+  }
+}
+
+
+/*==========  Mobile First  ==========*/
+
+// ≤576px
+@include media-breakpoint-up(sm) {
+}
+
+// ≤768px
+@include media-breakpoint-up(md) {
+}
+
+// ≤992px
+@include media-breakpoint-up(lg) {
+}
+
+// ≤1200px
+@include media-breakpoint-up(xl) {
+}

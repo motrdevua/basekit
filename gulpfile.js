@@ -1,20 +1,19 @@
-const { src, dest, watch, series, parallel } = require("gulp");
-const plugin = require("gulp-load-plugins")({
+const { src, dest, watch, series, parallel } = require('gulp');
+const plugin = require('gulp-load-plugins')({
   rename: {
-    "gulp-clean-css": "cleanCSS",
-    "gulp-group-css-media-queries": "gcmq",
-    "gulp-webp-html": "webpHTML",
+    'gulp-clean-css': 'cleanCSS',
+    'gulp-group-css-media-queries': 'gcmq',
+    'gulp-webp-html': 'webpHTML',
   },
 });
 
-const del = require("del");
-const imagemin = require("gulp-imagemin");
+const del = require('del');
+const imagemin = require('gulp-imagemin');
 
-const browserSync = require("browser-sync").create();
+const browserSync = require('browser-sync').create();
 
-const webpack = require("webpack");
-const stream = require("webpack-stream");
-const TerserJSPlugin = require("terser-webpack-plugin");
+const webpack = require('webpack');
+const stream = require('webpack-stream');
 
 const dev = plugin.environments.development;
 const prod = plugin.environments.production;
@@ -22,45 +21,40 @@ const prod = plugin.environments.production;
 const onError = (err) => {
   plugin.notify.onError({
     title: `Error in ${err.plugin}`,
-    message: "<%= error.message %>",
-    sound: "Pop",
+    message: '<%= error.message %>',
+    sound: 'Pop',
     onLast: true,
   })(err);
-  this.emit("end");
+  this.emit('end');
 };
 
 const path = {
   src: {
-    root: "src/",
-    js: "src/assets/js/",
-    img: "src/assets/images/",
-    fonts: "src/assets/fonts/",
-    styles: "src/assets/styles/",
-    data: "src/assets/data/",
+    root: 'src/',
+    js: 'src/assets/js/',
+    img: 'src/assets/images/',
+    fonts: 'src/assets/fonts/',
+    styles: 'src/assets/styles/',
+    data: 'src/assets/data/',
   },
   dist: {
-    root: "dist/",
-    assets: "dist/assets/",
+    root: 'dist/',
+    assets: 'dist/assets/',
   },
 };
 
 /* ===============   webpackConfig  =============== */
 
 const webpackConfig = {
-  mode: dev() ? "development" : "production",
+  mode: dev() ? 'development' : 'production',
   output: {
     filename: `[name].js`,
   },
-  devtool: dev() ? "eval-source-map" : "none",
+  devtool: dev() ? 'eval-source-map' : 'none',
   optimization: {
     minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        test: /\.js(\?.*)?$/i,
-      }),
-    ],
     splitChunks: {
-      chunks: "all",
+      chunks: 'all',
     },
   },
   module: {
@@ -69,20 +63,20 @@ const webpackConfig = {
         test: /\.m?js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
         },
       },
     ],
   },
   plugins: [
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery",
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
     }),
   ],
   resolve: {
-    modules: ["node_modules"],
+    modules: ['node_modules'],
   },
 };
 
@@ -131,7 +125,7 @@ function styles() {
     )
     .pipe(
       plugin.sass({
-        outputStyle: "expanded",
+        outputStyle: 'expanded',
       })
     )
     .pipe(plugin.autoprefixer())
@@ -150,10 +144,10 @@ function styles() {
         )
       )
     )
-    .pipe(dev(plugin.sourcemaps.write(".")))
+    .pipe(dev(plugin.sourcemaps.write('.')))
     .pipe(
       plugin.rename({
-        suffix: ".min",
+        suffix: '.min',
       })
     )
     .pipe(dest(`${path.dist.assets}css`))
@@ -171,7 +165,7 @@ function js() {
     .pipe(stream(webpackConfig))
     .pipe(
       plugin.rename({
-        suffix: ".min",
+        suffix: '.min',
       })
     )
     .pipe(dest(`${path.dist.assets}js`))
@@ -250,7 +244,7 @@ function watchFiles() {
 function clean() {
   plugin.cache.clearAll();
   return del([path.dist.root, `${path.src.fonts}**/*.css`]).then((dir) => {
-    console.log("Deleted files and folders:\n", dir.join("\n"));
+    console.log('Deleted files and folders:\n', dir.join('\n'));
   });
 }
 

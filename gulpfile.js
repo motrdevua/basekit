@@ -233,7 +233,7 @@ function data() {
 
 function watchFiles() {
   watch(`${path.src.root}**/*.html`, html);
-  watch(path.src.styles, styles);
+  watch(path.src.root, styles);
   watch(path.src.js, js);
   watch(path.src.img, img);
   watch(path.src.data, data);

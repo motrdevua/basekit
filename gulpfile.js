@@ -1,14 +1,13 @@
 const { src, dest, watch, series, parallel } = require('gulp');
 const plugin = require('gulp-load-plugins')({
   rename: {
-    'gulp-clean-css': 'cleanCSS',
     'gulp-group-css-media-queries': 'gcmq',
-    'gulp-webp-html': 'webpHTML',
+    'gulp-webp-in-html': 'GulpWebpHtml2',
+    'gulp-tinypng-extended': 'tinypng',
   },
 });
 
 const del = require('del');
-const imagemin = require('gulp-imagemin');
 
 const browserSync = require('browser-sync').create();
 
@@ -17,6 +16,7 @@ const stream = require('webpack-stream');
 
 const dev = plugin.environments.development;
 const prod = plugin.environments.production;
+const fs = require('fs');
 
 const onError = (err) => {
   plugin.notify.onError({
@@ -37,9 +37,9 @@ const path = {
     styles: 'src/assets/styles/',
     data: 'src/assets/data/',
   },
-  dist: {
-    root: 'dist/',
-    assets: 'dist/assets/',
+  app: {
+    root: 'app/',
+    assets: 'app/assets/',
   },
 };
 
@@ -87,7 +87,7 @@ const webpackConfig = {
 
 function serve() {
   browserSync.init({
-    server: path.dist.root,
+    server: path.app.root,
     // tunnel: 'project', // Demonstration page: http://project.localtunnel.me
     // online: false, // Work Offline Without Internet Connection
   });
@@ -96,140 +96,120 @@ function serve() {
 /* =====================  html  ==================== */
 
 function html() {
-  return src([`${path.src.root}*.html`, `!${path.src.root}_*.html`])
-    .pipe(
-      plugin.include({
-        includePaths: [
-          `${__dirname}/${path.src.root}`,
-          `${__dirname}/${path.src.img}`,
-          `${__dirname}/${path.src.img}*`,
-        ],
-      })
-    )
-    .pipe(plugin.webpHTML())
-    .pipe(plugin.beautify.html({ indent_size: 2 }))
-    .pipe(dest(path.dist.root))
-    .pipe(
-      browserSync.reload({
-        stream: true,
-      })
-    );
+  return (
+    src([`${path.src.root}*.html`, `!${path.src.root}_*.html`])
+      .pipe(
+        plugin.include({
+          includePaths: [
+            `${__dirname}/${path.src.root}`,
+            `${__dirname}/${path.src.img}`,
+            `${__dirname}/${path.src.img}*`,
+          ],
+        })
+      )
+      // .pipe(plugin.GulpWebpHtml2())
+      .pipe(dest(path.app.root))
+      .pipe(
+        browserSync.reload({
+          stream: true,
+        })
+      )
+  );
 }
 
 /* ===================  styles  =================== */
 
 function styles() {
-  return src(`${path.src.styles}*.+(scss|sass)`)
-    .pipe(dev(plugin.sourcemaps.init()))
-    .pipe(
-      plugin.plumber({
-        errorHandler: onError,
-      })
-    )
-    .pipe(
-      plugin.sass({
-        outputStyle: 'expanded',
-      })
-    )
-    .pipe(plugin.autoprefixer())
-    .pipe(plugin.gcmq())
-    .pipe(
-      prod(
-        plugin.cleanCSS(
-          {
-            level: 2,
-            debug: true,
-          },
-          (details) => {
-            console.log(`${details.name}: ${details.stats.originalSize}`);
-            console.log(`${details.name}: ${details.stats.minifiedSize}`);
-          }
-        )
-      )
-    )
-    .pipe(dev(plugin.sourcemaps.write('.')))
-    .pipe(
-      plugin.rename({
-        suffix: '.min',
-      })
-    )
-    .pipe(dest(`${path.dist.assets}css`))
-    .pipe(browserSync.stream());
+  return (
+    src(`${path.src.styles}*.+(scss|sass)`)
+      .pipe(dev(plugin.sourcemaps.init()))
+      .pipe(plugin.plumber({ errorHandler: onError }))
+      .pipe(plugin.sass.sync({ outputStyle: 'expanded' }))
+      .pipe(plugin.autoprefixer())
+      // .pipe(plugin.gcmq())
+      .pipe(plugin.csso({ restructure: false }))
+      .pipe(dev(plugin.sourcemaps.write('.')))
+      .pipe(plugin.rename({ suffix: '.min' }))
+      .pipe(dest(`${path.app.assets}css`))
+      .pipe(browserSync.stream())
+  );
 }
 
 /* =====================  js  ===================== */
 function js() {
   return src(`${path.src.js}main.js`)
-    .pipe(
-      plugin.plumber({
-        errorHandler: onError,
-      })
-    )
+    .pipe(plugin.plumber({ errorHandler: onError }))
     .pipe(stream(webpackConfig))
-    .pipe(
-      plugin.rename({
-        suffix: '.min',
-      })
-    )
-    .pipe(dest(`${path.dist.assets}js`))
-    .pipe(
-      browserSync.reload({
-        stream: true,
-      })
-    );
+    .pipe(plugin.rename({ suffix: '.min' }))
+    .pipe(dest(`${path.app.assets}js`))
+    .pipe(browserSync.reload({ stream: true }));
 }
 
 /* ===================  images  =================== */
 
 function img() {
-  return src(`${path.src.img}**/*.*`)
+  return src(`${path.src.img}**/*.{png,jpg,jpeg}`)
+    .pipe(plugin.plumber({ errorHandler: onError }))
+    .pipe(plugin.webp({ quality: 100 }))
+    .pipe(dest(`${path.app.assets}images`))
+    .pipe(src(`${path.src.img}**/*.{png,jpg,jpeg}`))
     .pipe(
-      plugin.webp({
-        quality: 90,
-      })
-    )
-    .pipe(dest(`${path.dist.assets}images`))
-    .pipe(src(`${path.src.img}**/*.*`))
-    .pipe(
-      plugin.cache(
-        imagemin([
-          imagemin.gifsicle({ interlaced: true }),
-          imagemin.mozjpeg({ quality: 90, progressive: true }),
-          imagemin.optipng({ optimizationLevel: 5 }),
-          imagemin.svgo({
-            plugins: [
-              { removeViewBox: false },
-              { cleanupIDs: false },
-              { removeUnknownsAndDefaults: false },
-            ],
-          }),
-        ])
+      prod(
+        plugin.tinypng({
+          key: 'JBK36rHvht6hyW3MM7jQYzbx53hgWF2R',
+          sigFile: './src/assets/images/.tinypng-sigs',
+          log: true,
+        })
       )
     )
-    .pipe(dest(`${path.dist.assets}images`));
-}
-
-/* ===================  fontgen  ================== */
-
-function fontgen() {
-  return src(`${path.src.fonts}**/*.ttf`)
-    .pipe(plugin.fontmin())
-    .pipe(plugin.ttf2woff2())
-    .pipe(dest(path.src.fonts));
+    .pipe(dest(`${path.app.assets}images`))
+    .pipe(src(`${path.src.img}**/*.svg`))
+    .pipe(dest(`${path.app.assets}images`));
 }
 
 /* ====================  fonts  =================== */
 
 function fonts() {
-  return src(`${path.src.fonts}**/*.{svg,eot,ttf,woff,woff2}`).pipe(
-    dest(`${path.dist.assets}fonts`)
-  );
+  return src(`${path.src.fonts}**/*.ttf`)
+    .pipe(plugin.ttf2woff())
+    .pipe(dest(`${path.app.assets}fonts`))
+    .pipe(src(`${path.src.fonts}**/*.ttf`))
+    .pipe(plugin.ttf2woff2())
+    .pipe(dest(`${path.app.assets}fonts`));
 }
+
+const cb = () => {};
+const fontsStyleSheet = `${path.src.styles}utils/_fontstylesheet.scss`;
+const fontsPath = `${path.app.assets}fonts`;
+
+const fontsStyle = (done) => {
+  fs.readFileSync(fontsStyleSheet);
+  fs.writeFile(fontsStyleSheet, '', cb);
+  fs.readdir(fontsPath, (err, items) => {
+    if (items) {
+      let cFontname;
+      for (let i = 0; i < items.length; i += 1) {
+        let fontname = items[i].split('.');
+        [fontname] = fontname;
+        if (cFontname !== fontname) {
+          fs.appendFile(
+            fontsStyleSheet,
+            `@include font-face("./${fontsPath}${fontname}", "${fontname}", 400);\r\n`,
+            cb
+          );
+        }
+        cFontname = fontname;
+      }
+    }
+  });
+
+  done();
+};
 
 /* =====================  data  =================== */
 
 function data() {
-  return src(`${path.src.data}**/*`).pipe(dest(`${path.dist.assets}data`));
+  return src(`${path.src.data}**/*`).pipe(dest(`${path.app.assets}data`));
 }
 
 /* ====================  watch  =================== */
@@ -239,6 +219,7 @@ function watchFiles() {
   watch(path.src.root, styles);
   watch(path.src.js, js);
   watch(path.src.img, img);
+  watch(path.src.fonts, series(fonts, fontsStyle));
   watch(path.src.data, data);
 }
 
@@ -246,7 +227,7 @@ function watchFiles() {
 
 function clean() {
   plugin.cache.clearAll();
-  return del([path.dist.root, `${path.src.fonts}**/*.css`]).then((dir) => {
+  return del([path.app.root, `${path.src.img}/.tinypng-sigs`]).then((dir) => {
     console.log('Deleted files and folders:\n', dir.join('\n'));
   });
 }
@@ -257,8 +238,8 @@ exports.html = html;
 exports.styles = styles;
 exports.js = js;
 exports.img = img;
-exports.fontgen = fontgen;
 exports.fonts = fonts;
+exports.fontsStyle = fontsStyle;
 exports.data = data;
 exports.clean = clean;
 exports.watch = watchFiles;
@@ -267,10 +248,17 @@ exports.watch = watchFiles;
 
 exports.default = series(
   clean,
-  parallel(html, styles, js, img, fonts, data),
+  fonts,
+  fontsStyle,
+  parallel(html, styles, js, img, data),
   parallel(watchFiles, serve)
 );
 
 /* ===================  build  ==================== */
 
-exports.build = series(clean, parallel(html, styles, js, img, fonts, data));
+exports.build = series(
+  clean,
+  fonts,
+  fontsStyle,
+  parallel(html, styles, js, img, data)
+);

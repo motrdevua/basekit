@@ -1,19 +1,17 @@
-$maxWidth: 1170;
-$minWidth: 320;
-
-// ================== BOOTSTRAP =====================
-
-$grid-gutter-width: 30px;
-$grid-columns: 12;
-$grid-breakpoints: (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px);
-$container-max-widths: (sm: 540px, md: 720px, lg: 960px, xl: 1170px);
-
 // ==================== FONTS =======================
 
-$default: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+$default-font: Verdana,
+Tahoma,
+Geneva,
+sans-serif;
 
 // =================== COLORS =======================
 
-$main: #313131;
 $black: black;
 $white: white;
+$pagebg: #f5f5f5;
+$accent: #ff6363;
+$grey: #49525c;
+$main: #313131;
+$whatsapp: #41c352;
+$phone: #2591f5;

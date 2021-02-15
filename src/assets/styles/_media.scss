@@ -9,30 +9,18 @@ only screen and (min-resolution: 2dppx) {
 
 // ≥1200px
 @include media-breakpoint-down(lg) {
-  .header, .footer {
-    background: #ff0022;
-  }
 }
 
 // ≥992px
 @include media-breakpoint-down(md) {
-  .header, .footer {
-    background: #fbff00;
-  }
 }
 
 // ≥768px
 @include media-breakpoint-down(sm) {
-  .header, .footer {
-    background: #2bff00;
-  }
 }
 
 // ≥576px
 @include media-breakpoint-down(xs) {
-  .header, .footer {
-    background: #00ccff;
-  }
 }
 
 

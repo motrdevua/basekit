@@ -3,11 +3,11 @@ $screen: 1920;
   $addSize: $pc - $mob;
   $addSizeMob: $addSize + $addSize * .7;
 
-  @media (max-width: 767px) {
+  @media (max-width: 767.98px) {
     font-size: calc(#{$mob + px} + #{$addSizeMob} * ((100vw - 375px) / #{$screen}));
   }
 
-  @media (min-width: 767px) {
+  @media (min-width: 767.98px) {
     font-size: calc(#{$mob + px} + #{$addSize} * (100vw / #{$screen}));
   }
 }

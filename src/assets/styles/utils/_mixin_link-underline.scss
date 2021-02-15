@@ -1,0 +1,28 @@
+@mixin link-underline {
+  position: relative;
+  color: $accent;
+  font-weight: 700;
+
+  &:before {
+    position: absolute;
+    bottom: 1px;
+    left: 50%;
+    display: flex;
+    width: 0;
+    height: 1px;
+    background: $accent;
+    content: "";
+    transition: all .2s ease-in-out;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+  }
+
+  &:hover:before {
+    width: 100%;
+  }
+
+  &:hover {
+    color: $accent;
+    transition: all .2s ease-in-out;
+  }
+}

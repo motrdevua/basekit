@@ -1,43 +1,59 @@
-// =====================  Utils  ==========================
+/*! =====================  Bootstrap  ====================== */
 
-@import 'utils/mixin_font-face';
-@import 'utils/fontstylesheet';
+$grid-gutter-width: 30px;
+$grid-columns: 12;
+$grid-breakpoints: (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px);
+$container-max-widths: (sm: 540px, md: 720px, lg: 960px, xl: 1170px);
 
-@import 'utils/reset';
-@import 'utils/nulling';
+@import "../../../node_modules/bootstrap/scss/mixins/_breakpoints.scss";
+@import "../../../node_modules/bootstrap/scss/bootstrap-grid.scss";
 
-@import 'utils/variables';
-@import 'utils/mixin_rfs';
+/*! ===================  Bootstrap end  ==================== */
 
-@import '../../../node_modules/bootstrap/scss/mixins/_breakpoints.scss';
-@import '../../../node_modules/bootstrap/scss/bootstrap-grid.scss';
+/* ========================  Utils  ======================== */
 
-// ====================  Default  =========================
+@import "utils/_mixin_font-face";
+@import "utils/fontstylesheet";
 
-/*! Defaults */
+@import "utils/variables";
+
+@import "utils/mixin_icon-halo";
+@import "utils/_mixin_link-underline";
+
+/* ======================  Utils end ======================= */
+
+/*! =====================  Defaults  ======================= */
+
+@import "utils/nulling";
 
 html, body {
   position: relative;
   margin: 0;
   padding: 0;
-  min-width: $minWidth + px;
+  min-width: 320px;
   width: 100%;
   height: 100%;
+  font-size: 100%;
+
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
 }
 
 body {
-  background-color: $white;
+  min-height: 100vh;
+  background-color: $pagebg;
   color: $main;
   letter-spacing: -.022em;
   font-weight: 400;
   font-style: normal;
-  font-family: $default;
+  font-size: 17px;
+  font-family: $default-font;
   line-height: 1.47059;
 
-  @include rfs(17, 12);
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
 }
-
-// sticky footer (always at the bottom of page)
 
 .wrapper {
   display: flex;
@@ -48,77 +64,27 @@ body {
   width: 100%;
 }
 
-.header {
-  flex: 0 0 auto;
-}
-
 .content {
   flex: 1 0 auto;
+  margin: 70px 0 0 0;
 }
 
-.footer {
+.header, .footer {
   flex: 0 0 auto;
+  background: $grey;
+  color: darken($white, 10%);
+  font-size: 12px;
 }
 
-.container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 0 auto;
-  padding: 0 15px;
-  max-width: $maxWidth + px;
-  width: 100%;
+/*! ===================  Defaults end  ===================== */
 
-  @media screen and (max-width: 1199.98px) {
-    max-width: calc(1199.98px - 30px);
-  }
+/* =====================  Blocks  ======================== */
 
-  @media screen and (max-width: 991.98px) {
-    max-width: calc(991.98px - 30px);
-  }
+@import "_link-title";
 
-  @media screen and (max-width: 767.98px) {
-    max-width: calc(767.98px - 30px);
-  }
+@import "../../blocks/header/_header";
+@import "../../blocks/footer/_footer";
 
-  @media screen and (max-width: 575.98px) {
-    max-width: calc(575.98px - 30px);
-  }
-}
+/* ======================  Media  ========================= */
 
-.img-wrap {
-  display: flex;
-  overflow: hidden;
-  align-items: center;
-  justify-content: center;
-  height: auto;
-
-  & img {
-    max-width: 100%;
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-  }
-
-  & picture {
-    max-width: 100%;
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-  }
-}
-
-/*! Defaults End */
-
-// =====================  modules  ========================
-
-@import '../../blocks/ru/header/_header';
-@import '../../blocks/ru/footer/_footer';
-
-// =====================  Styles  =========================
-
-// =====================  Media  ==========================
-
-@import 'utils/media';
+@import "media";

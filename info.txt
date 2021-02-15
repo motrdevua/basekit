@@ -1,0 +1,11 @@
+Logo
+  booma-logo
+
+Phone
+  orders orders__phone
+
+Schedule
+  orders orders__schedule
+
+Whatsapp
+  whatsapp
